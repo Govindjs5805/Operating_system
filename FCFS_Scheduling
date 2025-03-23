@@ -1,0 +1,58 @@
+#include<stdio.h>
+int main(){
+    int n,i,j;
+    printf("Enter the number of procesess");
+    scanf("%d",&n);
+    if(n<=0){
+        printf("Invalid input");
+        return 1;
+    }
+    int at[n],bt[n],wt[n],ct[n],tat[n];
+    float avg_wt=0,avg_tat=0;
+    int total_wt=0,total_tat=0;
+    printf("Enter the arrival time and burst time for each procese\n");
+    for(i=0;i<n;i++){
+        printf("Process %d",i+1);
+        scanf("%d%d",&at[i],&bt[i]);
+    }
+    //Sorting with arrival time
+    for(i=0;i<n-1;i++){
+    for(j=i+1;j<n;j++){
+        if(at[j]<at[i]){
+            int temp=at[j];
+            at[j]=at[i];
+            at[i]=temp;
+            temp=bt[j];
+            bt[j]=bt[i];
+            bt[i]=temp;
+        }
+    }}
+    //Calculate completion time
+    ct[0]=at[0]+bt[0]; //completion time=arrival time + burst time
+    for(i=1;i<n;i++){
+        if(ct[i-1]<at[i]){
+            ct[i]=at[i]+bt[i];
+        }
+        else{
+            ct[i]=ct[i-1]+bt[i];        
+            
+        }
+    }
+    //Calculate turnaround time and waiting time
+    for(i=0;i<n;i++){
+        tat[i]=ct[i]-at[i];
+        wt[i]=tat[i]-bt[i];
+        total_wt+=wt[i];
+        total_tat+=tat[i];
+    }
+    avg_wt=(float)total_wt/n;
+    avg_tat=(float)total_tat/n;
+    printf("Process\tArrival time\tBurst stime\tCompletion time\tTurnaround time\tWaiting time\n");
+    for(i=0;i<n;i++){
+        printf("%d\t\t%d\t\t%d\t\t%d\t\t%d\t\t%d\n",i+1,at[i],bt[i],ct[i],tat[i],wt[i]);
+    }
+    printf("Average waiting time : %.2f",avg_wt);
+    printf("Average Turnaround time : %.2f",avg_tat);
+    return 0;
+    
+}
