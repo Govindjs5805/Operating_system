@@ -1,0 +1,51 @@
+#include<stdio.h>
+void bestfit(int b[],int f[],int nf,int nb){
+    int i,j,temp,flag,frag;
+    for(i=0;i<nb-1;i++){
+        for(j=i+1;j<nb;j++){
+            if(b[j]<b[i]){
+                temp=b[j];
+                b[j]=b[i];
+                b[i]=temp;
+            }
+        }
+    }
+    for(i=0;i<nf;i++){
+        flag=0;
+        for(j=0;j<nb;j++){
+            if(b[j]>=f[i]){
+                printf("File size %d can be put in %d\n",f[i],b[j]);
+                frag=b[j]-f[i];
+                printf("Internal Fragmentation : %d\n",frag);
+                b[j]=0;
+                flag=1;
+                break;
+            }
+        }
+        if(flag==0){
+            printf("File size %d must wait\n",f[i]);
+        }
+    }
+}
+int main(){
+    int nf,nb;
+    printf("Enter the number of files\n");
+    scanf("%d",&nf);
+    int f[nf];
+    
+    printf("Enter the number of blocks\n");
+    scanf("%d",&nb);
+    int b[nb];
+    
+    printf("Enter the files in order\n");
+    for(int i=0;i<nf;i++){
+        scanf("%d",&f[i]);
+    }
+    
+    printf("Enter the blocks in order\n");
+    for(int i=0;i<nb;i++){
+        scanf("%d",&b[i]);
+    }
+    bestfit(b,f,nf,nb);
+    return 0;
+}
