@@ -1,0 +1,96 @@
+#include<stdio.h>
+int main(){
+    int n,front=0,rear=0,quantum,i;
+    printf("Enter the number of processe\n");
+    scanf("%d",&n);
+    if(n<=0){
+        printf("Invalid number of processes\n");
+        return 1;
+    }
+    int at[n],bt[n],tat[n],ct[n],wt[n],q[100];
+    int rt[n];
+    int totaltat=0,totalwt=0;
+    float avgtat=0,avgwt=0;
+    printf("Enter the arrival time and burst time for each process\n");
+    for(i=0;i<n;i++){
+        printf("Process %d : ",i+1);
+        scanf("%d%d",&at[i],&bt[i]);
+        rt[i]=bt[i];
+        ct[i]=0;
+    }
+    int min_at=100;
+    for(i=0;i<n;i++){
+        if(at[i]<min_at){
+            min_at=at[i];
+        }
+    }
+    int curr_time;
+    curr_time=min_at;
+    
+    printf("Enter the time quantum\n");
+    scanf("%d",&quantum);
+    
+    int completed=0; 
+    int visited[n];
+    for(i=0;i<n;i++){
+        visited[i]=0;
+    }
+    
+    //first process
+    q[rear]=0;
+    rear++;
+    visited[0]=1;
+    
+    while(completed<n){
+        int process=q[front];
+        front++;
+        if(rt[process]>0){
+            if(rt[process]<=quantum){
+                curr_time+=rt[process];
+                rt[process]=0;
+                ct[process]=curr_time;
+                tat[process]=ct[process]-at[process];
+                wt[process]=tat[process]-bt[process];
+                totaltat+=tat[process];
+                totalwt+=wt[process];
+                completed++;
+            }else{
+                curr_time+=quantum;
+                rt[process]-=quantum;
+            }
+            for(i=0;i<n;i++){
+                if(!visited[i]&&at[i]<=curr_time&&rt[i]>0){
+                    q[rear]=i;
+                    rear++;
+                    visited[i]=1;
+                }
+            }
+                if(rt[process]>0){
+                    q[rear]=process;
+                    rear++;
+                }
+        }
+        if(front==rear){
+            for(i=0;i<n;i++){
+                if(rt[i]>0){
+                    curr_time=at[i];
+                    q[rear]=i;
+                    rear++;
+                    visited[i]=1;
+                    break;
+                }
+            }
+        }
+       }
+       avgtat=(float)totaltat/n;
+       avgwt=(float)totalwt/n;
+       
+       printf("Process\t\tArrival time\t\tBurst time\t\tCompletion time\t\tTurnaround time\t\tWaiting time\n");
+       for(i=0;i<n;i++){
+           printf("%d\t\t%d\t\t%d\t\t%d\t\t%d\t\t%d\n",i+1,at[i],bt[i],ct[i],tat[i],wt[i]);
+       }
+       printf("Average Turnaround time : %.2f\n",avgtat);
+       printf("Average Waiting time : %.2f\n",avgwt);
+       return 0;
+    }
+    
