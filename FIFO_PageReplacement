@@ -1,0 +1,59 @@
+#include<stdio.h>
+int main(){
+    int n,f,hit=0,fault=0,i,found,j,k;
+    printf("Enter the number of pages\n");
+    scanf("%d",&n);
+    if(n<=0){
+        printf("Invalid number of pages\n");
+        return 1;
+    }
+    int pages[n];
+    printf("Enter the number of frames\n");
+    scanf("%d",&f);
+    if(f<=0){
+        printf("Invalid number of frames\n");
+        return 1;
+    }
+    int frames[f];
+    printf("Enter the page refernce string\n");
+    for(i=0;i<n;i++){
+        scanf("%d",&pages[i]);
+    }
+    for(i=0;i<f;i++){
+        frames[i]=-1;
+    }
+    for(i=0;i<n;i++){
+        found=0;
+        for(j=0;j<f;j++){
+            if(frames[j]==pages[i]){
+                hit++;
+                found=1;
+                break;
+            }
+        }
+        if(!found){
+            frames[k]=pages[i];
+            k=(k+1)%f;
+            fault++;
+        }
+        printf("%d\t",pages[i]);
+        for(j=0;j<f;j++){
+            if(frames[j]!=-1){
+                printf("%d  ",frames[j]);
+            }else{
+                printf("- ");
+            }
+        }
+    
+    if(!found){
+        printf("  -----> Page fault\n");
+    }else{
+        printf("  -----> Page hit\n");
+    }
+}
+    printf("Total number of hit : %d\n",hit);
+    printf("Total number of fault : %d\n",fault);
+    printf("Hit ratio : %.2f\n",(float)hit/n);
+    printf("Miss ratio : %.2f\n",(float)fault/n);
+    return 0;
+}
