@@ -1,0 +1,58 @@
+#include<stdio.h>
+int main(){
+    int n,i;
+    printf("Enter the number of processes\n");
+    scanf("%d",&n);
+    if(n<=0){
+        printf("Invalid number of processes\n");
+        return 1;
+    }
+    int at[n],bt[n],ct[n],tat[n],wt[n],prio[n],is_completed[n];
+    int totaltat=0,totalwt=0,completed=0,curr_time=0;
+    float avgtat=0,avgwt=0;
+    printf("Enter the arrival time and burst time for each process\n");
+    for(i=0;i<n;i++){
+        printf("Process %d : ",i+1);
+        scanf("%d%d",&at[i],&bt[i]);
+        is_completed[i]=0;
+    }
+    printf("Enter the priority for each process\n");
+    for(i=0;i<n;i++){
+        printf("Process %d : ",i+1);
+        scanf("%d",&prio[i]);
+    }
+    while(completed<n){
+        int idx=-1;
+        int min_prio=9999;
+        for(i=0;i<n;i++){
+            if(at[i]<=curr_time&&is_completed[i]==0&&min_prio>prio[i]){
+                    min_prio=prio[i];
+                    idx=i;
+                }
+            }
+        
+        if(idx==-1){
+            curr_time++;
+        }else{
+            curr_time+=bt[idx];
+            ct[idx]=curr_time;
+            tat[idx]=ct[idx]-at[idx];
+            wt[idx]=tat[idx]-bt[idx];
+            totaltat+=tat[idx];
+            totalwt+=wt[idx];
+            completed++;
+            is_completed[idx]=1;
+            curr_time=ct[idx];
+        }
+    }
+    avgtat=(float)totaltat/n;
+    avgwt=(float)totalwt/n;
+    
+     printf("Process\t\tArrival time\t\tPriority\t\tBurst time\t\tCompletion time\t\tTurnaround time\t\tWaiting time\n");
+       for(i=0;i<n;i++){
+           printf("%d\t\t%d\t\t%d\t\t%d\t\t%d\t\t%d\t\t%d\n",i+1,at[i],bt[i],prio[i],ct[i],tat[i],wt[i]);
+       }
+       printf("Average Turnaround time : %.2f\n",avgtat);
+       printf("Average Waiting time : %.2f\n",avgwt);
+       return 0;
+}
